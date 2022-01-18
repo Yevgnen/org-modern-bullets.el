@@ -51,6 +51,9 @@
     (?* . ?*))
   "Bullets alist for prettifying.")
 
+(defcustom org-modern-bullets-extra-suffix-size 0
+  "Extra suffix spaces to display.")
+
 (defface org-modern-bullets
   '((t (:inherit org-indent)))
   "Face for Org bullets.")
@@ -80,7 +83,8 @@
        `(display ,pretty-repl-str))
       (add-text-properties
        (1- (match-end 0)) (match-end 0)
-       `(display (space :align-to ,(- (match-end 0) (match-beginning 0))))))))
+       `(display (space :align-to ,(+ (- (match-end 0) (match-beginning 0))
+                                      org-modern-bullets-extra-suffix-size)))))))
 
 (defun org-modern-bullets--fontify-region (beg end)
   (save-excursion
