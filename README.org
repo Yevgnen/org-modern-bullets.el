@@ -1,0 +1,56 @@
+#+title: org-modern-bullets
+
+* Introduction
+
+This package tries to make the list bullets of  ~Org-mode~ prettier when using mixed pitch fonts for Unicode characters.
+
+The idea is simply and silly: use fixed pitch font to display the leading white spaces and the bullets to have them well aligned. Benefits of using fixed font:
+
+- well alignment
+- increase margins before texts
+
+** Installation
+
+*** ~straight.el~
+
+#+begin_src emacs-lisp
+(use-package org-modern-bullets
+  :straight (:host github :repo "Yevgnen/org-modern-bullets.el")
+  :hook (org-mode . org-modern-bullets-mode))
+#+end_src
+
+Enabling ~org-indent-mode~ is optional.
+
+** Configuration
+
+To use this package, please use a /fixed pitch font/ for the related faces: ~org-modern-bullets-unordered-face~ and ~org-modern-bullets-ordered-face~.
+
+#+begin_src emacs-lisp
+(custom-set-faces
+ '(org-modern-bullets-unordered-face ((t (:family "Courier" :height .6))))
+ '(org-modern-bullets-ordered-face ((t (:inherit org-modern-unordered-bullets)))))
+#+end_src
+
+The package is designed to work with ~org-indent-mode~, and should also work with ~visual-line-mode~. The most important config is to make sure both ~org-modern-bullets-unordered-face~ and ~org-modern-bullets-ordered-face~ faces have the same width as the ~org-indent~ face. e.g.
+
+#+begin_src emacs-lisp
+(custom-set-faces
+ '(org-indent ((t (:family "Courier" :height .6))))
+ '(org-modern-bullets-unordered-face ((t (:inherit org-indent))))
+ '(org-modern-bullets-ordered-face ((t (:inherit org-modern-unordered-bullets)))))
+#+end_src
+
+Please note that
+
+- if you set a very large font height for the mentioned faces, the alignment could still be broken.
+- try to find a font for bullets that work well with your mixed pitch fonts!
+
+* Screenshot
+
+[[file:images/screenshot.png]]
+
+The face setting in the screenshot is ~'((t (:family "SF Mono" :height .75)))~.
+
+* Limitations
+
+This package does not support ~*~ bullets for unordered list currently.
