@@ -33,9 +33,13 @@
   "Make Org bullets look modern."
   :group 'org)
 
-(defface org-modern-bullets
-  '((t (:family "Courier")))
-  "Face for Org bullets.")
+(defface org-modern-bullets-unordered-face
+  '((t (:family "Courier" :height .6)))
+  "Face for unordered list bullets.")
+
+(defface org-modern-bullets-ordered-face
+  '((t (:inherit org-modern-unordered-bullets)))
+  "Face for ordered list bullets.")
 
 (defvar org-modern-bullets--regex "^\\( *\\)?\\([+-]\\|[0-9]+\\.\\)?\\( +\\)") ; FIXME Support * bullets.
 
@@ -45,18 +49,21 @@
       (add-text-properties
        i
        (1+ i)
-       `(display ,(propertize " " 'face 'org-modern-bullets))))))
+       `(display ,(propertize " " 'face 'org-indent))))))
 
 (defun org-modern-bullets--fontify-bullet ()
   (if-let* ((beg (match-beginning 2))
             (end (match-end 2))
-            (str (match-string-no-properties 2)))
+            (str (match-string-no-properties 2))
+            (face (if (= (1+ beg) end)
+                      'org-modern-bullets-unordered-face
+                    'org-modern-bullets-ordered-face)))
       (dolist (i (number-sequence beg (1- end)))
         (add-text-properties
          i
          (1+ i)
          `(display ,(propertize (char-to-string (aref str (- i beg)))
-                                'face 'org-modern-bullets))))))
+                                'face face))))))
 
 (defun org-modern-bullets--fontify ()
   (with-silent-modifications
