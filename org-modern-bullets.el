@@ -73,7 +73,8 @@
 
 (defun org-modern-bullets--fontify ()
   (with-silent-modifications
-    (when-let* ((repl-str (org-modern-bullets--get-replacement (match-string-no-properties 2)))
+    (when-let* ((repl-str (org-modern-bullets--get-replacement
+                           (match-string-no-properties 2)))
                 (repl-str (format "%s%s"
                                   (make-string (- (match-end 1) (match-beginning 1)) ? )
                                   repl-str))
