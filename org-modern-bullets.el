@@ -29,6 +29,10 @@
 
 (require 'subr-x)
 
+(defgroup org-modern-bullets nil
+  "Make Org bullets look modern."
+  :group 'org)
+
 (defcustom org-modern-bullets-prefix-regex
   "^\\( *\\)"
   "Regex for bullet list prefix.")
