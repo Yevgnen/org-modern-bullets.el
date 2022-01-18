@@ -41,7 +41,7 @@
   '((t (:inherit org-modern-unordered-bullets)))
   "Face for ordered list bullets.")
 
-(defvar org-modern-bullets--regex "^\\( *\\)?\\([+-]\\|[0-9]+\\.\\)?\\( +\\)") ; FIXME Support * bullets.
+(defvar org-modern-bullets--regex "^\\( *\\)?\\([+-]\\|[0-9]+[\\.)]\\)?\\( +\\)") ; FIXME Support * bullets.
 
 (defun org-modern-bullets--fontify-whitespace (beg end)
   (when (and beg end)
