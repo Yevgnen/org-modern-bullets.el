@@ -55,7 +55,7 @@
   "Extra suffix spaces to display.")
 
 (defface org-modern-bullets
-  '((t (:inherit (default org-indent))))
+  '((t (:inherit (default org-indent) :family "Courier" :height .9)))
   "Face for Org bullets.")
 
 (defvar org-modern-bullets--regex nil)
