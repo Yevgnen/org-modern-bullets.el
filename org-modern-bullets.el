@@ -66,15 +66,17 @@
 
 (defun org-modern-bullets--fontify ()
   (with-silent-modifications
-    (if-let* ((repl-str (org-modern-bullets--get-replacement (match-string-no-properties 2)))
-              (repl-str (format "%s%s%s"
-                                (make-string (- (match-end 1) (match-beginning 1)) ? )
-                                repl-str
-                                " "))
-              (pretty-repl-str (propertize repl-str 'face 'org-modern-bullets)))
-        (add-text-properties
-         (match-beginning 0) (match-end 0)
-         `(display ,pretty-repl-str)))))
+    (when-let* ((repl-str (org-modern-bullets--get-replacement (match-string-no-properties 2)))
+                (repl-str (format "%s%s"
+                                  (make-string (- (match-end 1) (match-beginning 1)) ? )
+                                  repl-str))
+                (pretty-repl-str (propertize repl-str 'face 'org-modern-bullets)))
+      (add-text-properties
+       (match-beginning 0) (1- (match-end 0))
+       `(display ,pretty-repl-str))
+      (add-text-properties
+       (1- (match-end 0)) (match-end 0)
+       `(display (space :align-to ,(- (match-end 0) (match-beginning 0))))))))
 
 (defun org-modern-bullets--fontify-region (beg end)
   (save-excursion
