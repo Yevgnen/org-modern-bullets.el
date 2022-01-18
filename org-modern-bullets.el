@@ -38,7 +38,7 @@
   "Regex for bullet list prefix.")
 
 (defcustom org-modern-bullets-bullet-regex
-  "\\([*+-]\\|[0-9]+\\.\\)"
+  "\\([+-]\\|[0-9]+\\.\\)"              ; FIXME Support * bullets.
   "Regex for bullets.")
 
 (defcustom org-modern-bullets-suffix-regex
