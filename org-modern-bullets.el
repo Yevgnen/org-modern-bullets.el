@@ -33,82 +33,45 @@
   "Make Org bullets look modern."
   :group 'org)
 
-(defcustom org-modern-bullets-prefix-regex
-  "^\\( *\\)"
-  "Regex for bullet list prefix.")
-
-(defcustom org-modern-bullets-bullet-regex
-  "\\([+-]\\|[0-9]+\\.\\)"              ; FIXME Support * bullets.
-  "Regex for bullets.")
-
-(defcustom org-modern-bullets-suffix-regex
-  " "
-  "Regex for bullet list suffix.")
-
-(defcustom org-modern-bullets-alist
-  '((?- . ?-)
-    (?+ . ?+)
-    (?* . ?*))
-  "Bullets alist for prettifying.")
-
-(defcustom org-modern-bullets-extra-suffix-size 0
-  "Extra suffix spaces to display.")
-
 (defface org-modern-bullets
-  '((t (:inherit (default org-indent) :family "Courier" :height .9)))
+  '((t (:family "Courier")))
   "Face for Org bullets.")
 
-(defvar org-modern-bullets--regex nil)
+(defvar org-modern-bullets--regex "^\\( *\\)?\\([+-]\\|[0-9]+\\.\\)?\\( +\\)") ; FIXME Support * bullets.
 
-(defun org-modern-bullets--build-regex ()
-  (setq org-modern-bullets--regex
-        (concat org-modern-bullets-prefix-regex
-                org-modern-bullets-bullet-regex
-                org-modern-bullets-suffix-regex)))
+(defun org-modern-bullets--fontify-whitespace (beg end)
+  (when (and beg end)
+    (dolist (i (number-sequence beg (1- end)))
+      (add-text-properties
+       i
+       (1+ i)
+       `(display ,(propertize " " 'face 'org-modern-bullets))))))
 
-(defun org-modern-bullets--get-replacement (thing)
-  (if (numberp thing)
-      (char-to-string (alist-get (string-to-char thing) org-modern-bullets-alist))
-    thing))
-
-;; Taken from: https://github.com/zevlg/telega.el/blob/eaf78e32b0cd1b20e8451fc851112880dbc6d257/telega-util.el#L127
-(defun org-modern-bullets-chars-xwidth (n &optional face)
-  (* n (if-let ((tframe (window-frame)))
-           (with-current-buffer (current-buffer)
-             (let* ((info (font-info
-                           (face-font (or face 'default) tframe) tframe))
-                    (width (aref info 11)))
-               (if (> width 0)
-                   width
-                 (aref info 10))))
-         (frame-char-width))))
+(defun org-modern-bullets--fontify-bullet ()
+  (if-let* ((beg (match-beginning 2))
+            (end (match-end 2))
+            (str (match-string-no-properties 2)))
+      (dolist (i (number-sequence beg (1- end)))
+        (add-text-properties
+         i
+         (1+ i)
+         `(display ,(propertize (char-to-string (aref str (- i beg)))
+                                'face 'org-modern-bullets))))))
 
 (defun org-modern-bullets--fontify ()
   (with-silent-modifications
-    (when-let* ((repl-str (org-modern-bullets--get-replacement
-                           (match-string-no-properties 2)))
-                (repl-str (format "%s%s"
-                                  (make-string (- (match-end 1) (match-beginning 1)) ? )
-                                  repl-str))
-                (pretty-repl-str (propertize repl-str 'face 'org-modern-bullets)))
-      (add-text-properties
-       (match-beginning 0) (1- (match-end 0))
-       `(display ,pretty-repl-str))
-      (add-text-properties
-       (1- (match-end 0)) (match-end 0)
-       `(display (space :align-to (,(org-modern-bullets-chars-xwidth
-                                     (+ (- (match-end 0) (match-beginning 0))
-                                        org-modern-bullets-extra-suffix-size)
-                                     'org-modern-bullets))))))))
+    ;; Prefix
+    (org-modern-bullets--fontify-whitespace (match-beginning 1) (match-end 1))
+    ;; Bullet
+    (org-modern-bullets--fontify-bullet)
+    ;; Suffix
+    (org-modern-bullets--fontify-whitespace (match-beginning 3) (match-end 3))))
 
 (defun org-modern-bullets--fontify-region (beg end)
   (save-excursion
     (goto-char beg)
     (while (re-search-forward org-modern-bullets--regex end t)
-      (if (string= (match-string-no-properties 1) "*")
-          (unless (= (match-beginning 0) (match-beginning 1))
-            (org-modern-bullets--fontify))
-        (org-modern-bullets--fontify)))))
+      (org-modern-bullets--fontify))))
 
 (defun org-modern-bullets--unfontify-region (beg end)
   (save-excursion
@@ -125,8 +88,6 @@
   (when t
     (if org-modern-bullets-mode
         (progn
-          (org-modern-bullets--build-regex)
-          (setq org-indent-boundary-char 0)
           (jit-lock-register #'org-modern-bullets--fontify-region)
           (org-modern-bullets--fontify-region (point-min) (point-max)))
       (jit-lock-unregister #'org-modern-bullets--fontify-region)
