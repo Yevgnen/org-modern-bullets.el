@@ -71,6 +71,18 @@
       (char-to-string (alist-get (string-to-char thing) org-modern-bullets-alist))
     thing))
 
+;; Taken from: https://github.com/zevlg/telega.el/blob/eaf78e32b0cd1b20e8451fc851112880dbc6d257/telega-util.el#L127
+(defun org-modern-bullets-chars-xwidth (n &optional face)
+  (* n (if-let ((tframe (window-frame)))
+           (with-current-buffer (current-buffer)
+             (let* ((info (font-info
+                           (face-font (or face 'default) tframe) tframe))
+                    (width (aref info 11)))
+               (if (> width 0)
+                   width
+                 (aref info 10))))
+         (frame-char-width))))
+
 (defun org-modern-bullets--fontify ()
   (with-silent-modifications
     (when-let* ((repl-str (org-modern-bullets--get-replacement
@@ -84,8 +96,10 @@
        `(display ,pretty-repl-str))
       (add-text-properties
        (1- (match-end 0)) (match-end 0)
-       `(display (space :align-to ,(+ (- (match-end 0) (match-beginning 0))
-                                      org-modern-bullets-extra-suffix-size)))))))
+       `(display (space :align-to (,(org-modern-bullets-chars-xwidth
+                                     (+ (- (match-end 0) (match-beginning 0))
+                                        org-modern-bullets-extra-suffix-size)
+                                     'org-modern-bullets))))))))
 
 (defun org-modern-bullets--fontify-region (beg end)
   (save-excursion
