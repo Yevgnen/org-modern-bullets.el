@@ -4,7 +4,7 @@
 
 This package tries to make the list bullets of  ~Org-mode~ prettier when using mixed pitch fonts for Unicode characters.
 
-The idea is simply and silly: use fixed pitch font to display the leading white spaces and the bullets to have them well aligned. Benefits of using fixed font:
+The idea is simple and silly: use fixed pitch font to display the leading white spaces and the bullets to have them well aligned. Benefits of using fixed font:
 
 - well alignment
 - increase margins before texts
