@@ -51,7 +51,7 @@ Please note that
 
 [[file:images/screenshot.png]]
 
-The face setting in the screenshot is ~'((t (:family "SF Mono" :height .75)))~.
+The face setting in the screenshot is ~((t (:family "SF Mono" :height .75)))~.
 
 * Limitations
 
