@@ -43,6 +43,7 @@ The package is designed to work with ~org-indent-mode~, and should also work wit
 Please note that
 
 - if you set a very large font height for the mentioned faces, the alignment could still be broken.
+- the package is not tested under complex Org environment with rich elements.
 - try to find a font for bullets that work well with your mixed pitch fonts!
 
 * Screenshot
