@@ -49,9 +49,15 @@ Please note that
 
 * Screenshot
 
-[[file:images/screenshot.png]]
+** Before
 
-The face setting in the screenshot is ~((t (:family "SF Mono" :height .75)))~.
+[[file:images/before.png]]
+
+** After
+
+[[file:images/after.png]]
+
+Notice how the bullets and indentation are aligned. The face setting in the screenshot is ~((t (:family "SF Mono" :height .75)))~.
 
 * Limitations
 
