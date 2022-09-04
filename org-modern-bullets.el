@@ -38,7 +38,7 @@
   "Face for unordered list bullets.")
 
 (defface org-modern-bullets-ordered-face
-  '((t (:inherit org-modern-unordered-bullets)))
+  '((t (:inherit org-modern-bullets-unordered-face)))
   "Face for ordered list bullets.")
 
 (defvar org-modern-bullets--regex "^\\( *\\)?\\([+-]\\|[0-9]+[\\.)]\\)?\\( +\\)") ; FIXME Support * bullets.
